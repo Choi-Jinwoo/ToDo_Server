@@ -20,10 +20,10 @@ export const login = async (req, res) => {
 
   try {
     // 존재하는 회원인지 확인
-    const user = await models.user.findOne({
+    const user = await models.User.findOne({
       where: {
-        id,
-        pw,
+        id: body.id,
+        pw: body.pw,
       },
     });
 
