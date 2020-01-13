@@ -2,7 +2,7 @@
  * @description Http Status에 맞는 Response 생성
  * @author 최진우 <dgsw@kakao.com>
  */
-const createResponse = require('./createResponse');
+import createResponse from './createResponse';
 
 // Http Status 200(success)
 export const OK = (res, message, data) => createResponse(res, 200, message, data);
