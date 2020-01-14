@@ -18,6 +18,7 @@ export default (sequelize, DataTypes) => {
       field: 'is_checked',
       type: DataTypes.BOOLEAN,
       allowNull: false,
+      defaultValue: false,
     },
     menuIdx: {
       field: 'menu_idx',

@@ -23,14 +23,19 @@ export default async (req, res, next) => {
     }
 
     // 토큰에 해당하는 회원이 없을 경우
-    const member = await models.Member.getMember(decoded.id);
-    if (!member) {
+    const user = await models.User.findOne({
+      where: {
+        id: decoded.id,
+      },
+    });
+
+    if (!user) {
       response.NOT_FOUND(res,
         '회원이 존재하지 않습니다.');
       return;
     }
 
-    req.member = member;
+    req.user = user;
 
     if (!next) {
       return;
