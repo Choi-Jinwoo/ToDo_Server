@@ -36,8 +36,9 @@ export const getMenus = async (req, res) => {
  */
 export const createMenu = async (req, res) => {
   const { user, body } = req;
-
+  console.log(body);
   const validateError = await validation.validateMenu(body);
+
   if (validateError) {
     log.yellow('[MENU-CREATE] 검증 오류.', validateError);
     response.BAD_REQUEST(res,
@@ -47,7 +48,6 @@ export const createMenu = async (req, res) => {
 
   try {
     body.userId = user.id;
-
     await models.Menu.create(body);
 
     log.green('[MENU-CREATE] 메뉴 생성 성공.')
