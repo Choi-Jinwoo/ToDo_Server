@@ -217,3 +217,106 @@ export const deleteList = async (req, res) => {
       '서버 오류.');
   }
 }
+
+/**
+ * @description 목록 확인
+ */
+export const checkList = async (req, res) => {
+  const { user } = req;
+  const { idx } = req.params;
+
+  try {
+    const list = await models.List.findOne({
+      where: {
+        idx,
+      },
+    });
+
+    if (!list) {
+      log.yellow('[LIST-DELETE] 없는 목록.');
+      response.NOT_FOUND(res,
+        '없는 목록.');
+      return;
+    }
+
+    const listMenu = await models.Menu.findOne({
+      where: {
+        idx: list.menuIdx,
+        userId: user.id,
+      }
+    });
+
+    if (!listMenu) {
+      log.yellow('[LIST-DELETE] 없는 메뉴.');
+      response.NOT_FOUND(res,
+        '없는 메뉴.');
+      return;
+    }
+
+    await models.List.update({
+      isChecked: true,
+    }, {
+      where: {
+        idx,
+      },
+    });
+
+    log.green('[LIST-CHECK] 목록 확인 성공.');
+    response.OK(res,
+      '목록 확인 성공.');
+  } catch (err) {
+    log.red('[LIST-CHECK] 서버 오류.', err);
+    response.INTERNAL_SERVER_ERROR(res,
+      '서버 오류.');
+  }
+}
+
+export const uncheckList = async (req, res) => {
+  const { user } = req;
+  const { idx } = req.params;
+
+  try {
+    const list = await models.List.findOne({
+      where: {
+        idx,
+      },
+    });
+
+    if (!list) {
+      log.yellow('[LIST-DELETE] 없는 목록.');
+      response.NOT_FOUND(res,
+        '없는 목록.');
+      return;
+    }
+
+    const listMenu = await models.Menu.findOne({
+      where: {
+        idx: list.menuIdx,
+        userId: user.id,
+      }
+    });
+
+    if (!listMenu) {
+      log.yellow('[LIST-DELETE] 없는 메뉴.');
+      response.NOT_FOUND(res,
+        '없는 메뉴.');
+      return;
+    }
+
+    await models.List.update({
+      isChecked: false,
+    }, {
+      where: {
+        idx,
+      },
+    });
+
+    log.green('[LIST-CHECK] 목록 확인 취소 성공.');
+    response.OK(res,
+      '목록 확인 취소 성공.');
+  } catch (err) {
+    log.red('[LIST-CHECK] 서버 오류.', err);
+    response.INTERNAL_SERVER_ERROR(res,
+      '서버 오류.');
+  }
+}
