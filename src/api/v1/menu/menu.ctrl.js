@@ -36,7 +36,7 @@ export const getMenus = async (req, res) => {
  */
 export const createMenu = async (req, res) => {
   const { user, body } = req;
-  console.log(body);
+
   const validateError = await validation.validateMenu(body);
 
   if (validateError) {
