@@ -81,11 +81,16 @@ export const createList = async (req, res) => {
       menuIdx: body.menu_idx,
     };
 
-    await models.List.create(data);
+    const list = await models.List.create(data);
+    const data = {
+      list,
+    };
 
     log.green('[LIST-CREATE] 목록 생성 성공.')
     response.OK(res,
-      '목록 생성 성공.');
+      '목록 생성 성공.',
+      list,
+    );
   } catch (error) {
     log.red('[LIST-CREATE] 서버 오류.', error);
     response.INTERNAL_SERVER_ERROR(res,
