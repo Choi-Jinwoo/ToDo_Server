@@ -82,14 +82,14 @@ export const createList = async (req, res) => {
     };
 
     const list = await models.List.create(data);
-    const data = {
+    const resData = {
       list,
     };
 
     log.green('[LIST-CREATE] 목록 생성 성공.')
     response.OK(res,
       '목록 생성 성공.',
-      list,
+      resData,
     );
   } catch (error) {
     log.red('[LIST-CREATE] 서버 오류.', error);
