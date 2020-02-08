@@ -3,3 +3,4 @@ config/
 .env
 yarn.lock
 dist/
+ormconfig.json
