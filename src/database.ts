@@ -1,5 +1,4 @@
 import {
-  // eslint-disable-next-line no-unused-vars
   Connection,
   createConnection,
 } from 'typeorm';
