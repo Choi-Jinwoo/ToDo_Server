@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 import { validateLogin, validateRegister } from '../../../../lib/validation/auth';
 import logger from '../../../../lib/logger';
-import User from '../../../../entities/User';
+import User from '../../../../entity/User';
 import { createToken } from '../../../../lib/token';
 
 export const login = async (req: Request, res: Response) => {
