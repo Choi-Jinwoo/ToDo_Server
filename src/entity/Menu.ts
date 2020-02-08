@@ -12,4 +12,6 @@ export default class Menu extends BaseEntity {
   @ManyToOne(() => User, { cascade: true, eager: true })
   @JoinColumn({ name: 'user_id' })
   user: User;
+  @Column({ name: 'user_id' })
+  user_id: string;
 }

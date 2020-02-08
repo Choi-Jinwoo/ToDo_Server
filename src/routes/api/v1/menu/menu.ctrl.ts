@@ -14,7 +14,7 @@ export const getMenus = async (req: AuthRequest, res: Response) => {
   try {
     const menus: Menu[] = await menuRepo.find({
       where: {
-        user,
+        user_id: user.id,
       },
     });
 
