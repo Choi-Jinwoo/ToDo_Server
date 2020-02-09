@@ -71,6 +71,14 @@ export const modifyMenu = async (req: AuthRequest, res: Response) => {
   const idx: number = Number(req.params.idx);
   const { name }: RequestBody = req.body;
 
+  if (isNaN(idx)) {
+    logger.yellow('검증 오류.', 'idx is NaN');
+    res.status(400).json({
+      message: '검증 오류',
+    });
+    return;
+  }
+
   try {
     const menuRepo = getRepository(Menu);
     const menu: Menu = await menuRepo.findOne({
@@ -105,6 +113,55 @@ export const modifyMenu = async (req: AuthRequest, res: Response) => {
     logger.red('메뉴 수정 서버 오류.', err);
     res.status(500).json({
       messages: '서버 오류.',
+    });
+  }
+};
+
+export const deleteMenu = async (req: AuthRequest, res: Response) => {
+  const user: User = req.user;
+  const idx: number = Number(req.params.idx);
+
+  if (isNaN(idx)) {
+    logger.yellow('검증 오류.', 'idx is NaN');
+    res.status(400).json({
+      message: '검증 오류',
+    });
+    return;
+  }
+
+  try {
+    const menuRepo = getRepository(Menu);
+    const menu: Menu = await menuRepo.findOne({
+      where: {
+        idx,
+      }
+    });
+
+    if (!menu) {
+      logger.yellow('메뉴 없음.');
+      res.status(404).json({
+        message: '메뉴 없음'
+      });
+      return;
+    }
+
+    if (menu.user_id !== user.id) {
+      logger.yellow('권한 없음.');
+      res.status(403).json({
+        message: '권한 없음',
+      });
+      return;
+    }
+
+    await menuRepo.delete(menu);
+    logger.green('메뉴 삭제 성공.');
+    res.status(200).json({
+      message: '메뉴 삭제 성공',
+    });
+  } catch (err) {
+    logger.red('메뉴 삭제 서버 오류.', err.message);
+    res.status(500).json({
+      message: '서버 오류',
     });
   }
 };
