@@ -9,9 +9,9 @@ export default class Menu extends BaseEntity {
   @Column({ length: 45, nullable: false })
   name: string
 
-  @ManyToOne(() => User, { cascade: true, eager: true })
+  @ManyToOne(type => User, { cascade: true })
   @JoinColumn({ name: 'user_id' })
   user: User;
-  @Column({ name: 'user_id' })
+  @Column('string')
   user_id: string;
 }

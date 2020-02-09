@@ -2,7 +2,7 @@
 import { Request, Response } from 'express';
 import AuthRequest from '../../../../type/AuthRequest';
 import { getRepository } from 'typeorm';
-import { validateCreateMenu } from '../../../../lib/validation/menu';
+import { validateCreateMenu, validateModifyMenu } from '../../../../lib/validation/menu';
 import logger from '../../../../lib/logger';
 import User from '../../../../entity/User';
 import Menu from '../../../../entity/Menu';
@@ -16,10 +16,6 @@ export const getMenus = async (req: AuthRequest, res: Response) => {
       where: {
         user_id: user.id,
       },
-    });
-
-    menus.forEach((e: Menu) => {
-      delete e.user;
     });
 
     logger.green('메뉴 조회 성공.');
@@ -61,6 +57,54 @@ export const createMenu = async (req: AuthRequest, res: Response) => {
     logger.red('메뉴 생성 서버 오류.');
     res.status(500).json({
       message: '서버 오류',
+    });
+  }
+};
+
+export const modifyMenu = async (req: AuthRequest, res: Response) => {
+  if (!validateModifyMenu(req, res)) return;
+
+  type RequestBody = {
+    name: string;
+  };
+  const user: User = req.user;
+  const idx: number = Number(req.params.idx);
+  const { name }: RequestBody = req.body;
+
+  try {
+    const menuRepo = getRepository(Menu);
+    const menu: Menu = await menuRepo.findOne({
+      where: {
+        idx,
+        user_id: user.id
+      }
+    });
+
+    if (!menu) {
+      logger.yellow('메뉴 없음.');
+      res.status(404).json({
+        message: '메뉴 없음',
+      });
+      return;
+    }
+
+    if (menu.user_id !== user.id) {
+      logger.yellow('권한 없음')
+      res.status(403).json({
+        message: '권한 없음',
+      });
+    }
+
+    menu.name = name;
+    menuRepo.save(menu);
+    logger.green('메뉴 수정 성공.');
+    res.status(200).json({
+      message: '메뉴 수정 성공.',
+    });
+  } catch (err) {
+    logger.red('메뉴 수정 서버 오류.', err);
+    res.status(500).json({
+      messages: '서버 오류.',
     });
   }
 };
