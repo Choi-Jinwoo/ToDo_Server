@@ -1,19 +1,6 @@
-import Joi, { SchemaLike } from 'joi';
+import Joi from 'joi';
+import validate from './validate';
 import { Request, Response } from 'express';
-import logger from '../logger';
-
-const validate = (req: Request, res: Response, schema: SchemaLike): boolean => {
-  const { body } = req;
-  const validation = Joi.validate(body, schema);
-  if (validation.error) {
-    logger.yellow('검증 오류', validation.error.message);
-    res.status(400).json({
-      message: '검증 오류.',
-    });
-    return false;
-  }
-  return true;
-};
 
 export const validateLogin = (req: Request, res: Response): boolean => {
   const schema = Joi.object().keys({
