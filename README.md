@@ -2,7 +2,7 @@
 
 ## 기술 스택
 - Express
-- TypeORM
+- Sequelize -> TypeORM
 - JWT
 - MySQL
 - AWS EC2
