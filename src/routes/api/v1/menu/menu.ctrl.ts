@@ -46,7 +46,7 @@ export const createMenu = async (req: AuthRequest, res: Response) => {
     const menu = new Menu();
     menu.name = name;
     menu.user_id = user.id;
-    menuRepo.save(menu);
+    await menuRepo.save(menu);
 
     logger.green('메뉴 생성 성공.');
     res.status(200).json({
@@ -103,7 +103,7 @@ export const modifyMenu = async (req: AuthRequest, res: Response) => {
     }
 
     menu.name = name;
-    menuRepo.save(menu);
+    await menuRepo.save(menu);
     logger.green('메뉴 수정 성공.');
     res.status(200).json({
       message: '메뉴 수정 성공.',

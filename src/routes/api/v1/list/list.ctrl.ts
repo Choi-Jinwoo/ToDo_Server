@@ -1,11 +1,12 @@
 import { Response } from 'express';
 import AuthRequest from '../../../../type/AuthRequest';
 import { getRepository } from 'typeorm';
-// import { validateCreateList } from '../../../../lib/validation/list';
+import { validateCreateList } from '../../../../lib/validation/list';
 import logger from '../../../../lib/logger';
 import User from '../../../../entity/User';
 import Menu from '../../../../entity/Menu';
 import List from '../../../../entity/List';
+import { validateCreateMenu } from '../../../../lib/validation/menu';
 
 export const getListByMenu = async (req: AuthRequest, res: Response) => {
   const user: User = req.user;
@@ -57,3 +58,45 @@ export const getListByMenu = async (req: AuthRequest, res: Response) => {
     });
   }
 };
+
+export const createList = async (req: AuthRequest, res: Response) => {
+  if (!validateCreateList(req, res)) return;
+
+  type RequestBody = {
+    name: string;
+    menu_idx: number;
+  };
+  const user: User = req.user;
+  const { name, menu_idx }: RequestBody = req.body;
+
+  try {
+    const menuRepo = getRepository(Menu);
+    const menu: Menu = await menuRepo.findOne({
+      idx: menu_idx,
+      user_id: user.id,
+    });
+
+    if (!menu) {
+      logger.yellow('메뉴 없음.');
+      res.status(404).json({
+        message: '메뉴 없음',
+      });
+      return;
+    }
+
+    const listRepo = getRepository(List);
+    const list = new List();
+    list.name = name;
+    list.menu_idx = menu_idx;
+    await listRepo.save(list);
+    logger.green('목록 생성 성공.');
+    res.status(200).json({
+      message: '목록 생성 성공',
+    });
+  } catch (err) {
+    logger.red('목록 생성 서버 오류.', err.message);
+    res.status(500).json({
+      message: '서버 오류',
+    });
+  }
+}

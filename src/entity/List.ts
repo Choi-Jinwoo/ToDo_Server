@@ -16,5 +16,5 @@ export default class List extends BaseEntity {
   @JoinColumn({ name: 'menu_idx' })
   menu: Menu;
   @Column('int')
-  menu_idx: string;
+  menu_idx: number;
 }
