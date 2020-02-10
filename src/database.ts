@@ -1,12 +1,28 @@
 import {
   Connection,
   createConnection,
+  ConnectionOptions,
 } from 'typeorm';
 import logger from './lib/logger';
+import databaseConfig from '../config/database.json';
+import entities from './entity';
 
 export const getConnection = async (): Promise<Connection> => {
+
+  const connectionOptions: ConnectionOptions = {
+    type: 'mysql',
+    database: databaseConfig.database,
+    synchronize: true,
+    logging: false,
+    entities,
+    host: databaseConfig.host,
+    port: databaseConfig.port,
+    username: databaseConfig.username,
+    password: databaseConfig.password,
+  };
+
   try {
-    const connection = createConnection();
+    const connection = createConnection(connectionOptions);
     logger.green('[DB] connected');
     return connection;
   } catch (err) {
