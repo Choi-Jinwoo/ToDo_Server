@@ -160,3 +160,119 @@ export const deleteList = async (req: AuthRequest, res: Response) => {
     });
   }
 }
+
+export const checkList = async (req: AuthRequest, res: Response) => {
+  const user: User = req.user;
+  const idx: number = Number(req.params.idx);
+
+  if (isNaN(idx)) {
+    logger.yellow('검증 오류.', 'idx is NaN');
+    res.status(400).json({
+      message: '검증 오류',
+    });
+    return;
+  }
+
+  try {
+    const listRepo = getRepository(List);
+    const list: List = await listRepo.findOne({
+      where: {
+        idx,
+      },
+    });
+
+    if (!list) {
+      logger.yellow('없는 목록.');
+      res.status(404).json({
+        message: '없는 목록',
+      });
+      return;
+    }
+
+    const menuRepo = getRepository(Menu);
+    const menu: Menu = await menuRepo.findOne({
+      where: {
+        idx: list.menu_idx,
+        user_id: user.id,
+      },
+    });
+
+    if (!menu) {
+      logger.yellow('없는 메뉴.');
+      res.status(404).json({
+        message: '없는 메뉴',
+      });
+      return;
+    }
+
+    list.is_checked = true;
+    await listRepo.save(list);
+    logger.green('목록 확인 성공.');
+    res.status(200).json({
+      message: '목록 확인 성공',
+    });
+  } catch (err) {
+    logger.red('목록 확인 서버 오류.', err.message);
+    res.status(500).json({
+      message: '서버 오류.',
+    });
+  }
+};
+
+export const uncheckList = async (req: AuthRequest, res: Response) => {
+  const user: User = req.user;
+  const idx: number = Number(req.params.idx);
+
+  if (isNaN(idx)) {
+    logger.yellow('검증 오류.', 'idx is NaN');
+    res.status(400).json({
+      message: '검증 오류',
+    });
+    return;
+  }
+
+  try {
+    const listRepo = getRepository(List);
+    const list: List = await listRepo.findOne({
+      where: {
+        idx,
+      },
+    });
+
+    if (!list) {
+      logger.yellow('없는 목록.');
+      res.status(404).json({
+        message: '없는 목록',
+      });
+      return;
+    }
+
+    const menuRepo = getRepository(Menu);
+    const menu: Menu = await menuRepo.findOne({
+      where: {
+        idx: list.menu_idx,
+        user_id: user.id,
+      },
+    });
+
+    if (!menu) {
+      logger.yellow('없는 메뉴.');
+      res.status(404).json({
+        message: '없는 메뉴',
+      });
+      return;
+    }
+
+    list.is_checked = false;
+    await listRepo.save(list);
+    logger.green('목록 확인 취소 성공.');
+    res.status(200).json({
+      message: '목록 확인 취소 성공',
+    });
+  } catch (err) {
+    logger.red('목록 확인 취소 서버 오류.', err.message);
+    res.status(500).json({
+      message: '서버 오류.',
+    });
+  }
+};
