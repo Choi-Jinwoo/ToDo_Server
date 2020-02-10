@@ -1,5 +1,4 @@
-
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import AuthRequest from '../../../../type/AuthRequest';
 import { getRepository } from 'typeorm';
 import { validateCreateMenu, validateModifyMenu } from '../../../../lib/validation/menu';

@@ -12,7 +12,7 @@ export default class List extends BaseEntity {
   @Column({ name: 'is_checked', nullable: false, default: false })
   is_checked: boolean
 
-  @ManyToOne(() => Menu, { cascade: true, eager: true })
+  @ManyToOne(() => Menu, { cascade: true })
   @JoinColumn({ name: 'menu_idx' })
   menu: Menu;
   @Column('int')
