@@ -7,12 +7,12 @@ export default class List extends BaseEntity {
   idx: number;
 
   @Column({ length: 150, nullable: false })
-  name: string
+  content: string
 
   @Column({ name: 'is_checked', nullable: false, default: false })
   is_checked: boolean
 
-  @ManyToOne(() => Menu, { cascade: true })
+  @ManyToOne(() => Menu, { onDelete: "CASCADE" })
   @JoinColumn({ name: 'menu_idx' })
   menu: Menu;
   @Column('int')

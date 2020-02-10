@@ -4,7 +4,7 @@ import { Request, Response } from 'express';
 
 export const validateCreateList = (req: Request, res: Response): boolean => {
   const schema = Joi.object().keys({
-    name: Joi.string().max(40).required(),
+    content: Joi.string().max(40).required(),
     menu_idx: Joi.number().integer().required(),
   });
 

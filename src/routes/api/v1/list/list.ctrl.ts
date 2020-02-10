@@ -63,11 +63,11 @@ export const createList = async (req: AuthRequest, res: Response) => {
   if (!validateCreateList(req, res)) return;
 
   type RequestBody = {
-    name: string;
+    content: string;
     menu_idx: number;
   };
   const user: User = req.user;
-  const { name, menu_idx }: RequestBody = req.body;
+  const { content, menu_idx }: RequestBody = req.body;
 
   try {
     const menuRepo = getRepository(Menu);
@@ -86,7 +86,7 @@ export const createList = async (req: AuthRequest, res: Response) => {
 
     const listRepo = getRepository(List);
     const list = new List();
-    list.name = name;
+    list.content = content;
     list.menu_idx = menu_idx;
     const createdList: List = await listRepo.save(list);
     logger.green('목록 생성 성공.');
