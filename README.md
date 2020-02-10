@@ -1,7 +1,8 @@
 # TO DO
 
 ## 기술 스택
-- Express.js
+- Express
+- TypeORM
 - JWT
 - MySQL
 - AWS EC2
