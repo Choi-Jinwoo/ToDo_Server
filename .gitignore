@@ -1,6 +1,7 @@
-node_modules/
+node_modules
 config/
 .env
 yarn.lock
 dist/
 ormconfig.json
+.vscode
