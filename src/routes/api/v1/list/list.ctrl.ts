@@ -6,7 +6,6 @@ import logger from '../../../../lib/logger';
 import User from '../../../../entity/User';
 import Menu from '../../../../entity/Menu';
 import List from '../../../../entity/List';
-import { validateCreateMenu } from '../../../../lib/validation/menu';
 
 export const getListByMenu = async (req: AuthRequest, res: Response) => {
   const user: User = req.user;
