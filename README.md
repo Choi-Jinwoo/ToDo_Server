@@ -8,7 +8,7 @@
 - AWS EC2
 
 ## 기능
-[사용하기](http://wlswoo.com)
+~~[사용하기]~~
 
 ### ✔ 로그인
 ![주석 2020-02-03 192746](https://user-images.githubusercontent.com/49791336/73645862-7b51ab80-46bb-11ea-950f-7772855207b0.png)
